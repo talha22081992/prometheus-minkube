@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      flask: web
+  template:
+    metadata:
+      labels:
+        flask: web
+    spec:
+      containers:
+      - name: flask
+        image: talha1995/flask_dynamic_app_mongo:1.0
+        env:
+        - name: mongo
+          value: mongo-entrypoint  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-entrypoint
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    flask: web
+  ports:
+  - port: 5000
+    targetPort: 5000
+    nodePort: 30002

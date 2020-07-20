@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      mongo: db
+  template:
+    metadata:
+      labels:
+        mongo: db
+    spec:
+      containers:
+      - name: mongo-cont
+        image: mongo:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-entrypoint
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    mongo: db
+  ports:
+  - port: 27017 #Service port
+    targetPort: 27017 #port of Pod
